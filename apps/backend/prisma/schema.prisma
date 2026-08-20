@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("TOURIST")
+  places       Place[]
+  comments     Comment[]
+  createdAt    DateTime @default(now())
+}
+
+model Place {
+  id              String    @id @default(cuid())
+  title           String
+  district        String
+  category        String
+  latitude        Float
+  longitude       Float
+  story           String
+  history         String
+  audioGuide      String
+  videoUrl        String?
+  bestTime        String?
+  travelTip       String?
+  localFood       String?
+  safetyNote      String?
+  accessibility   String?
+  durationMinutes Int       @default(30)
+  panoramaDataUrl String
+  imageMime       String
+  imageSizeBytes  Int
+  mapX            Float
+  mapY            Float
+  status          String    @default("PUBLISHED")
+  authorId        String
+  author          User      @relation(fields: [authorId], references: [id])
+  comments        Comment[]
+  media           PlaceMedia[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([district])
+  @@index([category])
+  @@index([latitude, longitude])
+}
+
+model PlaceMedia {
+  id        String   @id @default(cuid())
+  type      String
+  caption   String?
+  dataUrl    String
+  mimeType  String
+  sizeBytes Int
+  sortOrder Int      @default(0)
+  placeId   String
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([placeId])
+  @@index([type])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  body      String
+  placeId   String
+  userId    String
+  place     Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}

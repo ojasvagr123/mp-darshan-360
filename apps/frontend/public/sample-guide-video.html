@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MP Darshan 360 Story Video</title>
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: #143226;
+        color: #fff8df;
+        font-family: Arial, sans-serif;
+      }
+
+      .scene {
+        position: relative;
+        display: grid;
+        min-height: 100vh;
+        place-items: center;
+        background:
+          radial-gradient(circle at 78% 22%, rgba(255, 215, 127, 0.45), transparent 12%),
+          linear-gradient(#8fd2ff 0 42%, #9cb86e 42% 62%, #21392f 62%);
+      }
+
+      .hills,
+      .road,
+      .marker {
+        position: absolute;
+        inset: auto 0 0;
+      }
+
+      .hills {
+        height: 58%;
+        background:
+          linear-gradient(145deg, transparent 0 32%, #386447 33% 56%, transparent 57%),
+          linear-gradient(35deg, transparent 0 42%, #264a3b 43% 68%, transparent 69%);
+        animation: drift 8s linear infinite;
+      }
+
+      .road {
+        height: 22%;
+        background: linear-gradient(90deg, #27312e, #59665c, #27312e);
+      }
+
+      .marker {
+        left: 50%;
+        bottom: 30%;
+        width: 44px;
+        height: 44px;
+        border: 5px solid #fff;
+        border-radius: 50% 50% 50% 0;
+        background: #a3271b;
+        transform: rotate(-45deg);
+        animation: pulse 1.4s ease-in-out infinite;
+      }
+
+      .title {
+        position: relative;
+        z-index: 2;
+        width: min(720px, 88vw);
+        border-radius: 10px;
+        background: rgba(16, 45, 36, 0.78);
+        padding: 28px;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 6vw, 4rem);
+      }
+
+      p {
+        margin: 12px 0 0;
+        font-weight: 700;
+        line-height: 1.5;
+      }
+
+      @keyframes drift {
+        from { transform: translateX(0); }
+        to { transform: translateX(-80px); }
+      }
+
+      @keyframes pulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(163, 39, 27, 0.35); }
+        50% { box-shadow: 0 0 0 24px rgba(163, 39, 27, 0); }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="scene">
+      <div class="hills"></div>
+      <div class="road"></div>
+      <div class="marker"></div>
+      <section class="title">
+        <h1>मध्य प्रदेश दर्शन 360</h1>
+        <p>Hidden places, real coordinates, multimedia stories, and citizen tourism experiences.</p>
+      </section>
+    </main>
+  </body>
+</html>

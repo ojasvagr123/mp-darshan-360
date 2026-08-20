@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: mp-darshan-360-api
+    env: node
+    plan: free
+    rootDir: apps/backend
+    buildCommand: npm install && npx prisma generate && npx prisma db push
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLIENT_URL
+        sync: false
