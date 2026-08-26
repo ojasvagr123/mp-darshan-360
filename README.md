@@ -48,11 +48,13 @@ Change these local demo credentials and `JWT_SECRET` before deployment.
 
 The project uses separate database schemas:
 
-- `prisma/schema.prisma` — local SQLite development
-- `prisma/schema.postgres.prisma` — Render/PostgreSQL deployment
+- `prisma/schema.prisma` — default Render/PostgreSQL deployment schema
+- `prisma/schema.sqlite.prisma` — local SQLite development schema
+- `prisma/schema.postgres.prisma` — explicit PostgreSQL schema used by `render.yaml`
 
-The included `render.yaml` explicitly selects the PostgreSQL schema, creates the
-tables, and idempotently seeds the administrator and initial campus stops. Set
+The default schema is PostgreSQL, so both Render's dashboard-default Prisma
+commands and the included `render.yaml` work. The blueprint explicitly creates
+the tables and idempotently seeds the administrator and initial campus stops. Set
 `DATABASE_URL` to the PostgreSQL connection string supplied by Render, not a
 `file:` URL. Also set `CLIENT_URL` to the deployed frontend origin.
 

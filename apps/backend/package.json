@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
-    "db:generate": "prisma generate",
+    "db:generate": "prisma generate --schema prisma/schema.sqlite.prisma",
     "db:init": "node prisma/init-sqlite.mjs",
-    "db:push": "prisma db push",
+    "db:push": "prisma db push --schema prisma/schema.sqlite.prisma",
     "db:seed": "node prisma/seed.js",
     "db:generate:prod": "prisma generate --schema prisma/schema.postgres.prisma",
     "db:push:prod": "prisma db push --schema prisma/schema.postgres.prisma"
