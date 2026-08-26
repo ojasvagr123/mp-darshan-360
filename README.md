@@ -58,6 +58,16 @@ the tables and idempotently seeds the administrator and initial campus stops. Se
 `DATABASE_URL` to the PostgreSQL connection string supplied by Render, not a
 `file:` URL. Also set `CLIENT_URL` to the deployed frontend origin.
 
+For an existing Render service whose root directory is the repository root, use:
+
+```text
+Build Command: npm run render:build
+Start Command: npm start
+```
+
+If its Root Directory is already `apps/backend`, the `render.yaml` build command
+works directly from that directory.
+
 ## Computer graphics viva summary
 
 The campus map is a raster image used as a normalized 2D coordinate space. When the administrator clicks it, the application stores percentages rather than fixed screen pixels, so markers remain aligned across viewport sizes. Canvas uses the DDA algorithm to plot route pixels from the Main Gate to a selected stop. An animated direction marker follows a quadratic Bezier curve, with translation and rotation applied every frame. The panorama adds an interactive image-space transformation through drag and zoom.

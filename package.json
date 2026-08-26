@@ -7,6 +7,7 @@
     "install:all": "npm install --prefix apps/backend && npm install --prefix apps/frontend",
     "dev": "concurrently \"npm run dev --prefix apps/backend\" \"npm run dev --prefix apps/frontend\"",
     "build": "npm run build --prefix apps/frontend",
+    "render:build": "npm install --prefix apps/backend && npm run db:generate:prod --prefix apps/backend && npm run db:push:prod --prefix apps/backend && npm run db:seed --prefix apps/backend",
     "start": "npm run start --prefix apps/backend",
     "db:generate": "npm run db:generate --prefix apps/backend",
     "db:init": "npm run db:init --prefix apps/backend",
