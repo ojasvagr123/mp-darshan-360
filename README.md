@@ -56,7 +56,9 @@ The default schema is PostgreSQL, so both Render's dashboard-default Prisma
 commands and the included `render.yaml` work. The blueprint explicitly creates
 the tables and idempotently seeds the administrator and initial campus stops. Set
 `DATABASE_URL` to the PostgreSQL connection string supplied by Render, not a
-`file:` URL. Also set `CLIENT_URL` to the deployed frontend origin.
+`file:` URL. Also set `CLIENT_URL` to the deployed frontend origin. A trailing
+slash is accepted and normalized. Multiple origins can be supplied as a
+comma-separated list when Vercel preview deployments also need API access.
 
 For an existing Render service whose root directory is the repository root, use:
 

@@ -17,10 +17,21 @@ const upload = multer({
   },
 });
 
+const allowedOrigins = (process.env.CLIENT_URL ?? "http://localhost:5173")
+  .split(",")
+  .map((value) => value.trim().replace(/\/+$/, ""))
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL ?? "http://localhost:5173",
     credentials: true,
+    origin(origin, callback) {
+      // Requests without Origin are server-to-server or local health checks.
+      if (!origin || allowedOrigins.includes(origin.replace(/\/+$/, ""))) {
+        return callback(null, true);
+      }
+      return callback(new Error(`Origin ${origin} is not allowed by CORS.`));
+    },
   }),
 );
 app.use(express.json({ limit: "1mb" }));
