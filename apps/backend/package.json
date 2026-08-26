@@ -7,6 +7,7 @@
     "dev": "node --watch src/server.js",
     "start": "node src/server.js",
     "db:generate": "prisma generate",
+    "db:init": "node prisma/init-sqlite.mjs",
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.js"
   },
@@ -17,9 +18,9 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
-    "mp-darshan-360": "file:../..",
     "multer": "^2.0.2",
     "prisma": "^6.14.0",
+    "sgsits-virtual-campus": "file:../..",
     "zod": "^4.0.17"
   }
 }

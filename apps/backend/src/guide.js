@@ -37,7 +37,7 @@ export function buildAudioGuide(place) {
   }
 
   return [
-    `Welcome to ${place.title} in ${place.district}.`,
+    `Welcome to ${place.title} in the ${place.district} of SGSITS.`,
     place.story,
     place.history,
     place.bestTime ? `Best time to visit is ${place.bestTime}.` : "",
@@ -56,21 +56,21 @@ export function buildGuide(place) {
     chapters: [
       {
         heading: "पहला दृश्य",
-        text: `Start with the 360 panorama of ${place.title}. Notice the terrain, approach route, and nearby natural or heritage details.`,
+        text: `Start with the 360 panorama of ${place.title}. Look around to understand its entrances, nearby buildings, and campus context.`,
       },
       {
-        heading: "इतिहास और महत्व",
+        heading: "History and significance",
         text: place.history,
       },
       {
-        heading: "यात्रा अनुभव",
+        heading: "Campus experience",
         text: place.story,
       },
       {
-        heading: "यात्रा तैयारी",
+        heading: "Visitor information",
         text: [
           place.bestTime ? `Best time: ${place.bestTime}` : "",
-          place.travelTip ? `Travel tip: ${place.travelTip}` : "",
+          place.travelTip ? `Visitor tip: ${place.travelTip}` : "",
           place.safetyNote ? `Safety: ${place.safetyNote}` : "",
           place.accessibility ? `Accessibility: ${place.accessibility}` : "",
         ]
@@ -95,9 +95,9 @@ export function buildGuide(place) {
         mapY: place.mapY,
       },
       pipeline: [
-        "Read tourist latitude and longitude",
-        "Project world coordinates into 2D MP map space",
-        "Rasterize route pixels with DDA line drawing",
+        "Read the administrator's clicked campus-map point",
+        "Map normalized campus coordinates into responsive screen space",
+        "Rasterize a route from the Main Gate with DDA line drawing",
         "Animate a guide marker on a quadratic Bezier curve",
         "Apply translation, rotation, and scaling each animation frame",
       ],
@@ -105,7 +105,7 @@ export function buildGuide(place) {
         {
           name: "Coordinate Projection",
           detail:
-            "The backend converts real latitude-longitude into normalized 2D screen coordinates so every upload lands at the correct relative map position.",
+            "Each administrator click is stored as normalized X/Y coordinates so markers remain aligned on the responsive campus image.",
         },
         {
           name: "DDA Line Drawing",

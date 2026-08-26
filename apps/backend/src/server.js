@@ -3,11 +3,10 @@ import bcrypt from "bcryptjs";
 import cors from "cors";
 import express from "express";
 import multer from "multer";
-import { createToken, requireAuth } from "./auth.js";
+import { createToken, requireAdmin, requireAuth } from "./auth.js";
 import { prisma } from "./db.js";
 import { buildAudioGuide, buildGuide, makeDataUrl, normalizeVideoUrl } from "./guide.js";
-import { isInsideMadhyaPradesh, projectToMap } from "./map.js";
-import { commentSchema, loginSchema, placeSchema, registerSchema } from "./validators.js";
+import { loginSchema, placeSchema } from "./validators.js";
 
 const app = express();
 const upload = multer({
@@ -18,20 +17,9 @@ const upload = multer({
   },
 });
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  process.env.CLIENT_URL,
-].filter(Boolean);
-
 app.use(
   cors({
-    origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
-        return callback(null, true);
-      }
-
-      return callback(new Error("Not allowed by CORS"));
-    },
+    origin: process.env.CLIENT_URL ?? "http://localhost:5173",
     credentials: true,
   }),
 );
@@ -91,32 +79,7 @@ function publicPlace(place) {
 }
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, service: "MP Darshan 360 API" });
-});
-
-app.post("/api/auth/register", async (req, res) => {
-  const parsed = registerSchema.safeParse(req.body);
-
-  if (!parsed.success) {
-    return res.status(400).json({ message: "Invalid registration data." });
-  }
-
-  const existing = await prisma.user.findUnique({ where: { email: parsed.data.email } });
-
-  if (existing) {
-    return res.status(409).json({ message: "Email already registered." });
-  }
-
-  const passwordHash = await bcrypt.hash(parsed.data.password, 10);
-  const user = await prisma.user.create({
-    data: {
-      email: parsed.data.email.toLowerCase(),
-      name: parsed.data.name,
-      passwordHash,
-    },
-  });
-
-  res.status(201).json({ token: createToken(user), user: publicUser(user) });
+  res.json({ ok: true, service: "SGSITS Virtual Campus API" });
 });
 
 app.post("/api/auth/login", async (req, res) => {
@@ -132,6 +95,10 @@ app.post("/api/auth/login", async (req, res) => {
 
   if (!user) {
     return res.status(401).json({ message: "Wrong email or password." });
+  }
+
+  if (user.role !== "ADMIN") {
+    return res.status(403).json({ message: "This login is reserved for the college administrator." });
   }
 
   const ok = await bcrypt.compare(parsed.data.password, user.passwordHash);
@@ -231,7 +198,7 @@ app.get("/api/places/:id/guide", async (req, res) => {
   res.json({ guide: buildGuide(place), place: publicPlace(place) });
 });
 
-app.post("/api/places", requireAuth, upload.fields([
+app.post("/api/places", requireAuth, requireAdmin, upload.fields([
   { name: "panorama", maxCount: 1 },
   { name: "photos", maxCount: 6 },
 ]), async (req, res) => {
@@ -256,15 +223,7 @@ app.post("/api/places", requireAuth, upload.fields([
     return res.status(400).json({ message: "Gallery uploads must be images." });
   }
 
-  const { latitude, longitude } = parsed.data;
-
-  if (!isInsideMadhyaPradesh(latitude, longitude)) {
-    return res.status(400).json({
-      message: "Coordinates should be inside Madhya Pradesh for this platform.",
-    });
-  }
-
-  const { mapX, mapY } = projectToMap(latitude, longitude);
+  const { mapX, mapY } = parsed.data;
   const panoramaDataUrl = makeDataUrl(panorama);
   const videoUrl = normalizeVideoUrl(parsed.data.videoUrl);
   const audioGuide = parsed.data.audioGuide || [
@@ -285,9 +244,9 @@ app.post("/api/places", requireAuth, upload.fields([
       history: parsed.data.history,
       imageMime: panorama.mimetype,
       imageSizeBytes: panorama.size,
-      latitude,
+      latitude: 0,
       localFood: parsed.data.localFood || null,
-      longitude,
+      longitude: 0,
       mapX,
       mapY,
       media: {
@@ -317,38 +276,6 @@ app.post("/api/places", requireAuth, upload.fields([
   res.status(201).json({ place: publicPlace(place) });
 });
 
-app.post("/api/places/:id/comments", requireAuth, async (req, res) => {
-  const parsed = commentSchema.safeParse(req.body);
-
-  if (!parsed.success) {
-    return res.status(400).json({ message: "Invalid comment." });
-  }
-
-  const place = await prisma.place.findUnique({ where: { id: req.params.id } });
-
-  if (!place) {
-    return res.status(404).json({ message: "Place not found." });
-  }
-
-  const comment = await prisma.comment.create({
-    data: {
-      body: parsed.data.body,
-      placeId: place.id,
-      userId: req.user.id,
-    },
-    include: { user: true },
-  });
-
-  res.status(201).json({
-    comment: {
-      author: publicUser(comment.user),
-      body: comment.body,
-      createdAt: comment.createdAt,
-      id: comment.id,
-    },
-  });
-});
-
 app.use((error, _req, res, _next) => {
   if (error instanceof multer.MulterError) {
     return res.status(400).json({ message: error.message });
@@ -361,5 +288,5 @@ app.use((error, _req, res, _next) => {
 const port = Number(process.env.PORT ?? 4000);
 
 app.listen(port, () => {
-  console.log(`MP Darshan 360 API running on http://localhost:${port}`);
+  console.log(`SGSITS Virtual Campus API running on http://localhost:${port}`);
 });

@@ -1,14 +1,15 @@
 {
-  "name": "mp-darshan-360",
+  "name": "sgsits-virtual-campus",
   "version": "1.0.0",
   "private": true,
-  "description": "MP hidden tourism 360 panorama full-stack application",
+  "description": "SGSITS interactive campus map and 360 panorama tour",
   "scripts": {
     "install:all": "npm install --prefix apps/backend && npm install --prefix apps/frontend",
     "dev": "concurrently \"npm run dev --prefix apps/backend\" \"npm run dev --prefix apps/frontend\"",
     "build": "npm run build --prefix apps/frontend",
     "start": "npm run start --prefix apps/backend",
     "db:generate": "npm run db:generate --prefix apps/backend",
+    "db:init": "npm run db:init --prefix apps/backend",
     "db:push": "npm run db:push --prefix apps/backend",
     "db:seed": "npm run db:seed --prefix apps/backend"
   },

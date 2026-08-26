@@ -1,11 +1,5 @@
 import { z } from "zod";
 
-export const registerSchema = z.object({
-  email: z.string().email(),
-  name: z.string().min(2).max(80),
-  password: z.string().min(6).max(80),
-});
-
 export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1),
@@ -19,9 +13,9 @@ export const placeSchema = z.object({
   district: z.string().min(2).max(80),
   durationMinutes: z.coerce.number().int().min(5).max(240).optional(),
   history: z.string().min(20).max(2500),
-  latitude: z.coerce.number(),
+  mapX: z.coerce.number().min(0).max(100),
+  mapY: z.coerce.number().min(0).max(100),
   localFood: z.string().max(300).optional().or(z.literal("")),
-  longitude: z.coerce.number(),
   safetyNote: z.string().max(300).optional().or(z.literal("")),
   story: z.string().min(20).max(2000),
   title: z.string().min(3).max(120),

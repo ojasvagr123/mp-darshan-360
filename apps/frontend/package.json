@@ -12,10 +12,10 @@
     "@vitejs/plugin-react": "^5.0.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.468.0",
-    "mp-darshan-360": "file:../..",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-leaflet": "^5.0.0",
+    "sgsits-virtual-campus": "file:../..",
     "vite": "^6.0.5"
   }
 }
