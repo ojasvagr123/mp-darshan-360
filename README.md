@@ -44,6 +44,18 @@ Password: admin123
 
 Change these local demo credentials and `JWT_SECRET` before deployment.
 
+## Render deployment
+
+The project uses separate database schemas:
+
+- `prisma/schema.prisma` — local SQLite development
+- `prisma/schema.postgres.prisma` — Render/PostgreSQL deployment
+
+The included `render.yaml` explicitly selects the PostgreSQL schema, creates the
+tables, and idempotently seeds the administrator and initial campus stops. Set
+`DATABASE_URL` to the PostgreSQL connection string supplied by Render, not a
+`file:` URL. Also set `CLIENT_URL` to the deployed frontend origin.
+
 ## Computer graphics viva summary
 
 The campus map is a raster image used as a normalized 2D coordinate space. When the administrator clicks it, the application stores percentages rather than fixed screen pixels, so markers remain aligned across viewport sizes. Canvas uses the DDA algorithm to plot route pixels from the Main Gate to a selected stop. An animated direction marker follows a quadratic Bezier curve, with translation and rotation applied every frame. The panorama adds an interactive image-space transformation through drag and zoom.
